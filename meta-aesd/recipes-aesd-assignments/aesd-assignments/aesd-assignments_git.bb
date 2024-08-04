@@ -8,7 +8,7 @@ SRC_URI = "git://git@github.com/cu-ecen-aeld/assignments-3-and-later-Davidtober;
 
 PV = "1.0+git${SRCPV}"
 # TODO: set to reference a specific commit hash in your assignment repo
-SRCREV = "2a6eba0fd43863686c9a9bcf5e3d89080e8dd58a"
+SRCREV = "6770c2b91ee65777b4856af406d791fcba2978b3"
 
 # This sets your staging directory based on WORKDIR, where WORKDIR is defined at
 # https://docs.yoctoproject.org/ref-manual/variables.html?highlight=workdir#term-WORKDIR
@@ -20,6 +20,7 @@ S = "${WORKDIR}/git/server"
 # See https://git.yoctoproject.org/poky/plain/meta/conf/bitbake.conf?h=kirkstone
 FILES:${PN} += "${bindir}/aesdsocket"
 FILES:${PN} += "${sysconfdir}/init.d/S99aesdsocket"
+FILES:${PN} += "${sysconfdir}/rc.d/*/S99aesdsocket"
 # TODO: customize these as necessary for any libraries you need for your application
 TARGET_LDFLAGS += "-pthread -lrt"
 
@@ -43,4 +44,6 @@ do_install () {
 	install -m 0755 ${S}/aesdsocket ${D}${bindir}/
 	install -d ${D}${sysconfdir}/init.d
 	install -m 0755 ${S}/aesdsocket-start-stop ${D}${sysconfdir}/init.d/S99aesdsocket
+	install -d ${D}${sysconfdir}/rc5.d
+	ln -sf ${sysconfdir}/init.d/S99aesdsocket ${D}${sysconfdir}/rc5.d/S99aesdsocket
 }
